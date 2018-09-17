@@ -1,10 +1,11 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-
+import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { InvoiceComponent } from './pages/invoice/invoice.component';
 import { ForbiddenComponent } from './pages/forbidden/forbidden.component';
+import { InvoiceComponent } from './pages/invoice/invoice.component';
+import { InvoiceService } from './services/invoice.service';
 
 @NgModule({
   declarations: [
@@ -14,9 +15,12 @@ import { ForbiddenComponent } from './pages/forbidden/forbidden.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [
+    InvoiceService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,6 +1,6 @@
 import environmentModel from './environment.model';
 
 export const environment: environmentModel = {
-  production: true,
-  baseUrl: 'FIXME: heroku url'
+  production: false,
+  baseUrl: 'http://localhost:8080/api'
 };
