@@ -1,4 +1,8 @@
-declare namespace Responses {
+export namespace Responses {
+  export interface InvoiceResult {
+    result: Invoice
+  }
+
   export interface Invoice {
     _id: string;
     _customerId: string;
@@ -26,4 +30,16 @@ declare namespace Responses {
     income = 'income',
     service = 'service',
   }
+}
+
+export namespace Pagseguro {
+  export interface Options {
+    code: string;
+  }
+
+  export interface Callbacks {
+    success: (transactionCode: string) => void;
+    abort: () => void;
+  }
+
 }

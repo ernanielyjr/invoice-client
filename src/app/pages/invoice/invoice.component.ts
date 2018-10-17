@@ -1,7 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { switchMap, tap } from 'rxjs/operators';
+import { switchMap, tap, finalize } from 'rxjs/operators';
+import { Pagseguro, Responses } from '../../model';
 import { InvoiceService } from '../../services/invoice.service';
+
+declare function PagSeguroLightbox(paymentCode: string): void;
+declare function PagSeguroLightbox(options: Pagseguro.Options, callbacks: Pagseguro.Callbacks): void;
 
 @Component({
   selector: 'app-invoice',
@@ -10,24 +14,63 @@ import { InvoiceService } from '../../services/invoice.service';
 })
 export class InvoiceComponent implements OnInit {
 
+  private monthNames = ['', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+
   public invoice: Responses.Invoice;
+  public showHelp = false;
+  public loading = false;
+  public amountSum = 0;
 
   constructor(
     private invoiceService: InvoiceService,
     private route: ActivatedRoute,
+    private ref: ChangeDetectorRef,
   ) { }
 
-  async ngOnInit() {
+  ngOnInit() {
+    this.loadInvoice();
+  }
+
+  private loadInvoice() {
+    this.loading = true;
     this.route.paramMap
       .pipe(
         switchMap(
           params => this.invoiceService.getInvoice(params.get('invoiceId'))
         ),
-        tap((invoice) => {
-          this.invoice = invoice;
-        })
+        tap((res) => {
+          this.invoice = res.result;
+          this.amountSum = this.invoice.postings.reduce((sum, posting) => sum + posting.amount, 0);
+          this.loading = false;
+          this.ref.detectChanges();
+        }),
       )
       .subscribe();
+  }
+
+  public getMonthYear(invoice: Responses.Invoice): string {
+    return `${this.monthNames[invoice.month]}/${invoice.year}`;
+  }
+
+  public getDueDate(invoice: Responses.Invoice): string {
+    const day = ('0' + invoice.day).substr(-2);
+    const month = ('0' + (invoice.month + 1)).substr(-2);
+    return `${day}/${month}/${invoice.year}`;
+  }
+
+  public pay(paymentCode: string) {
+    PagSeguroLightbox({
+      code: paymentCode
+    }, {
+      success: (transactionCode) => {
+        console.log('transactionCode', transactionCode);
+        this.loadInvoice();
+      },
+      abort: () => {
+        this.showHelp = true;
+        this.ref.detectChanges();
+      }
+    });
   }
 
 }

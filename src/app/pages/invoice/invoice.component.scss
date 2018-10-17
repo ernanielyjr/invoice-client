@@ -1,0 +1,67 @@
+$section-spaces: 30px;
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    max-width: 720px;
+  }
+}
+
+header {
+  background-color: #28A74A;
+  padding: 20px;
+  text-align: center;
+  font-size: 30px;
+  line-height: 30px;
+  color: #FFF;
+  font-weight: 200;
+  margin-bottom: $section-spaces;
+
+  small {
+    display: block;
+    font-weight: 200;
+    font-size: 20px;
+  }
+}
+
+.main {
+  padding: 0 20px 30px;
+  border-bottom: solid 4px #28A74A;
+}
+
+.info,
+table {
+  margin-bottom: $section-spaces;
+}
+
+table {
+  border-bottom: solid 1px #dee2e6;
+
+  th,
+  td {
+    font-size: 13px;
+  }
+}
+
+h3 {
+  font-weight: 200;
+  margin: 10px 0;
+  padding: 0;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.help {
+  small {
+    display: block;
+    max-width: 425px;
+    margin: 0 auto;
+  }
+}

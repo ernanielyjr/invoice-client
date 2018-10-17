@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { Observable } from 'rxjs';
+import { Responses } from '../model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +13,6 @@ export class InvoiceService {
   ) { }
 
   public getInvoice(invoiceId: string) {
-    return this.http.get<Responses.Invoice>(`${environment.baseUrl}/v1/payment/${invoiceId}`);
+    return this.http.get<Responses.InvoiceResult>(`${environment.baseUrl}/v1/payment/${invoiceId}`);
   }
 }
