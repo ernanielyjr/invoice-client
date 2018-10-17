@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { switchMap, tap, finalize } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { catchError, switchMap, tap } from 'rxjs/operators';
 import { Pagseguro, Responses } from '../../model';
 import { InvoiceService } from '../../services/invoice.service';
 
@@ -14,12 +15,17 @@ declare function PagSeguroLightbox(options: Pagseguro.Options, callbacks: Pagseg
 })
 export class InvoiceComponent implements OnInit {
 
-  private monthNames = ['', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+  private monthNames = [
+    '',
+    'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+  ];
 
   public invoice: Responses.Invoice;
   public showHelp = false;
   public loading = false;
   public amountSum = 0;
+  public error = '';
 
   constructor(
     private invoiceService: InvoiceService,
@@ -32,15 +38,22 @@ export class InvoiceComponent implements OnInit {
   }
 
   private loadInvoice() {
+    this.error = '';
     this.loading = true;
     this.route.paramMap
       .pipe(
         switchMap(
           params => this.invoiceService.getInvoice(params.get('invoiceId'))
         ),
+        catchError((err) => {
+          this.error = (err && err.error && err.error.result) || err.error || err;
+          return of(null as Responses.InvoiceResult);
+        }),
         tap((res) => {
-          this.invoice = res.result;
-          this.amountSum = this.invoice.postings.reduce((sum, posting) => sum + posting.amount, 0);
+          if (res) {
+            this.invoice = res.result;
+            this.amountSum = this.invoice.postings.reduce((sum, posting) => sum + posting.amount, 0);
+          }
           this.loading = false;
           this.ref.detectChanges();
         }),
@@ -53,8 +66,8 @@ export class InvoiceComponent implements OnInit {
   }
 
   public getDueDate(invoice: Responses.Invoice): string {
-    const day = ('0' + invoice.day).substr(-2);
-    const month = ('0' + (invoice.month + 1)).substr(-2);
+    const day = (`0${invoice.day}`).substr(-2);
+    const month = (`0${invoice.month + 1}`).substr(-2);
     return `${day}/${month}/${invoice.year}`;
   }
 
@@ -62,8 +75,7 @@ export class InvoiceComponent implements OnInit {
     PagSeguroLightbox({
       code: paymentCode
     }, {
-      success: (transactionCode) => {
-        console.log('transactionCode', transactionCode);
+      success: () => {
         this.loadInvoice();
       },
       abort: () => {
