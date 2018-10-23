@@ -16,13 +16,15 @@
             <h3>Fatura de {{ getMonthYear(invoice) }}</h3>
           </div>
           <div class="col text-right">
-            Vencimento: <strong class="nowrap">{{ getDueDate(invoice) }}</strong><br />
+            <ng-container *ngIf="invoice.dueDate">
+              Vencimento: <strong class="nowrap">{{ invoice.dueDate | date:'shortDate' }}</strong><br />
+            </ng-container>
             <ng-container *ngIf="invoice.closed">
               Valor total: <strong class="nowrap">R$ {{ invoice.amount | number:'1.2-2' }}</strong>
             </ng-container>
-            <small class="text-muted" *ngIf="!invoice.closed">
-              Valor parcial: R$ {{ amountSum | number:'1.2-2' }}
-            </small>
+            <ng-container *ngIf="!invoice.closed">
+              Valor parcial: <strong class="nowrap">R$ {{ amountSum | number:'1.2-2' }}</strong>
+            </ng-container>
           </div>
         </div>
       </div>

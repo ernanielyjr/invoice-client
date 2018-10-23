@@ -65,12 +65,6 @@ export class InvoiceComponent implements OnInit {
     return `${this.monthNames[invoice.month]}/${invoice.year}`;
   }
 
-  public getDueDate(invoice: Responses.Invoice): string {
-    const day = (`0${invoice.day}`).substr(-2);
-    const month = (`0${invoice.month + 1}`).substr(-2);
-    return `${day}/${month}/${invoice.year}`;
-  }
-
   public pay(paymentCode: string) {
     PagSeguroLightbox({
       code: paymentCode
