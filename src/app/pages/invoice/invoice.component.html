@@ -17,7 +17,7 @@
           </div>
           <div class="col text-right">
             <ng-container *ngIf="invoice.dueDate">
-              Vencimento: <strong class="nowrap">{{ invoice.dueDate | date:'shortDate' }}</strong><br />
+              Vencimento: <strong class="nowrap">{{ invoice.dueDate | slice:0:10 | date:'shortDate' }}</strong><br />
             </ng-container>
             <ng-container *ngIf="invoice.closed">
               Valor total: <strong class="nowrap">R$ {{ invoice.amount | number:'1.2-2' }}</strong>
