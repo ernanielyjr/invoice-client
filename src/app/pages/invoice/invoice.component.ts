@@ -66,6 +66,12 @@ export class InvoiceComponent implements OnInit {
   }
 
   public pay(paymentCode: string) {
+    const isMobile = /Android|iPhone/i.test(window.navigator.userAgent);
+    if (isMobile) {
+      window.location.href = `https://sandbox.pagseguro.uol.com.br/v2/checkout/payment.html?code=${paymentCode}`;
+      return;
+    }
+
     PagSeguroLightbox({
       code: paymentCode
     }, {
