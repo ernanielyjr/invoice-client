@@ -47,13 +47,17 @@
       </table>
 
       <div class="text-center">
+        <div *ngIf="invoice.lastStatus === '2'" class="alert alert-warning">
+          <small>
+            <strong>Atenção!</strong> Aparentemente já existe um pagamento em andamento para esta fatura.
+            Cuidado para não gerar pagamento duplicado.
+            <a href="javascript:void(0);" (click)="showHelp = !showHelp">Precisa de ajuda?</a>
+          </small>
+        </div>
         <div *ngIf="!invoice.closed" class="alert alert-warning">Esta fatura ainda não está fechada!</div>
         <div *ngIf="invoice.paid && !loading" class="alert alert-success">Esta fatura está paga!</div>
-        <a *ngIf="invoice.closed && !invoice.paid && !loading"
-          class="btn btn-lg btn-success mb-3"
-          href="javascript:void(0);"
-          (click)="pay(invoice.paymentCode)"
-        >Pagar agora!</a>
+        <a *ngIf="invoice.closed && !invoice.paid && !loading" class="btn btn-lg btn-success mb-3" href="javascript:void(0);"
+          (click)="pay(invoice.paymentCode)">Pagar agora!</a>
       </div>
     </ng-container>
 
@@ -65,7 +69,7 @@
       </div>
       <div *ngIf="showHelp" class="alert alert-info help">
         <small>
-          Em caso de problemas com o pagamento ou dúvidas sobre a fatura, envie uma mensagem para o email
+          Em caso de problemas com o pagamento, dúvidas sobre a fatura, ou sugestões, envie uma mensagem para o email
           <strong><a target="_blank" href="mailto:financeiro@gauti.com.br">financeiro@gauti.com.br</a></strong>
           ou pelo WhatsApp <strong><a target="_blank" href="https://wa.me/5551993975995">+55 51 99397-5995</a></strong>.
         </small>
