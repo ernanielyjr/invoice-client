@@ -55,7 +55,8 @@
           </small>
         </div>
         <div *ngIf="!invoice.closed" class="alert alert-warning">Esta fatura ainda não está fechada!</div>
-        <div *ngIf="invoice.paid && !loading" class="alert alert-success">Esta fatura está paga!</div>
+        <div *ngIf="invoice.paid && !invoice.deferredPayment && !loading" class="alert alert-success">Esta fatura está paga!</div>
+        <div *ngIf="invoice.paid && invoice.deferredPayment && !loading" class="alert alert-warning">Os valores desta fatura já foram lançados na fatura mais recente!</div>
         <a *ngIf="invoice.closed && !invoice.paid && !loading" class="btn btn-lg btn-success mb-3" href="javascript:void(0);"
           (click)="pay(invoice.paymentCode)">Pagar agora!</a>
       </div>
