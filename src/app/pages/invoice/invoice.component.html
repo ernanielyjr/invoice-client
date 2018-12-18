@@ -89,7 +89,7 @@
             <a *ngIf="!paymentLoading && paymentMode === 'credit_card'" class="btn btn-lg btn-success mb-3" href="javascript:void(0);" (click)="pay()">Continuar no PagSeguro</a>
           </ng-container>
           <ng-container *ngIf="invoice.amount <= 0">
-            <div class="alert alert-success">O Saldo da sua fatura está positivo, não é necessário realizar pagamento!</div>
+            <div class="alert alert-success">O saldo da sua fatura está positivo, não é necessário realizar pagamento!</div>
           </ng-container>
 
           <div class="loader" *ngIf="paymentLoading"></div>
