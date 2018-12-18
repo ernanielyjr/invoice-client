@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { ForbiddenComponent } from './pages/forbidden/forbidden.component';
 import { InvoiceComponent } from './pages/invoice/invoice.component';
 import { InvoiceService } from './services/invoice.service';
+import { PaymentService } from './services/payment.service';
 
 registerLocaleData(pt, 'pt-BR');
 
@@ -27,7 +28,8 @@ registerLocaleData(pt, 'pt-BR');
       provide: LOCALE_ID,
       useValue: 'pt-BR'
     },
-    InvoiceService
+    InvoiceService,
+    PaymentService,
   ],
   bootstrap: [AppComponent]
 })

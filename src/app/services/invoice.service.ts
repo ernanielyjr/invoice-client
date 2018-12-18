@@ -15,4 +15,5 @@ export class InvoiceService {
   public getInvoice(invoiceId: string) {
     return this.http.get<Responses.InvoiceResult>(`${environment.baseUrl}/v1/payment/${invoiceId}`);
   }
+
 }

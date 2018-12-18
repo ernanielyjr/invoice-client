@@ -57,8 +57,43 @@
         <div *ngIf="!invoice.closed" class="alert alert-warning">Esta fatura ainda não está fechada!</div>
         <div *ngIf="invoice.paid && !invoice.deferredPayment && !loading" class="alert alert-success">Esta fatura está paga!</div>
         <div *ngIf="invoice.paid && invoice.deferredPayment && !loading" class="alert alert-warning">Os valores desta fatura já foram lançados na fatura mais recente!</div>
-        <a *ngIf="invoice.closed && !invoice.paid && !loading" class="btn btn-lg btn-success mb-3" href="javascript:void(0);"
-          (click)="pay(invoice.paymentCode)">Pagar agora!</a>
+        <ng-container *ngIf="invoice.closed && !invoice.paid && !loading">
+          <ng-container *ngIf="invoice.amount > 0">
+            <div class="paymentModeSelector">
+              <span>Pagar com:</span>
+              <label (click)="setPaymentMode('billet')" class="paymentMode" [class.selected]="paymentMode === 'billet'">
+                <i class="radio"></i>
+                <span>Boleto bancário</span>
+              </label>
+              <label (click)="setPaymentMode('credit_card')" class="paymentMode" [class.selected]="paymentMode === 'credit_card'">
+                <i class="radio"></i>
+                <span>Cartão de crédito</span>
+              </label>
+            </div>
+            <ng-container *ngIf="paymentMode === 'billet'">
+              <div class="alert alert-warning">
+                <small>
+                  <strong>Atenção!</strong> A data gerada no boleto não é a data de vencimento da sua fatura. O pagamento
+                  via boleto pode demorar até 3 dias úteis para ser identificado. Pagamentos não identificados em até 5
+                  dias após o vencimento da fatura podem resultar em suspensão dos serviços.
+                </small>
+              </div>
+              <ng-container *ngIf="!paymentLoading">
+                <ng-container *ngIf="invoice.paymentMode === 'billet' && invoice.paymentData">
+                  <a class="btn btn-lg btn-success mb-3" href="{{ invoice.paymentData }}" target="_blank">Imprimir boleto</a>
+                  <a class="mb-3 new-billet" href="javascript:void(0);" (click)="newBillet()">Gerar novo boleto</a>
+                </ng-container>
+                <a *ngIf="invoice.paymentMode !== 'billet' || !invoice.paymentData" class="btn btn-lg btn-success mb-3" href="javascript:void(0);" (click)="pay()">Gerar boleto</a>
+              </ng-container>
+            </ng-container>
+            <a *ngIf="!paymentLoading && paymentMode === 'credit_card'" class="btn btn-lg btn-success mb-3" href="javascript:void(0);" (click)="pay()">Continuar no PagSeguro</a>
+          </ng-container>
+          <ng-container *ngIf="invoice.amount <= 0">
+            <div class="alert alert-success">O Saldo da sua fatura está positivo, não é necessário realizar pagamento!</div>
+          </ng-container>
+
+          <div class="loader" *ngIf="paymentLoading"></div>
+        </ng-container>
       </div>
     </ng-container>
 
