@@ -73,9 +73,12 @@
             <ng-container *ngIf="paymentMode === 'billet'">
               <div class="alert alert-warning">
                 <small>
-                  <strong>Atenção!</strong> A data gerada no boleto não é a data de vencimento da sua fatura. O pagamento
-                  via boleto pode demorar até 3 dias úteis para ser identificado. Pagamentos não identificados em até 5
-                  dias após o vencimento da fatura podem resultar em suspensão dos serviços.
+                  Acréscimo de <strong>R$ 1,00</strong> para esta modalidade de pagamento.<br />
+                  <br />
+                  A data gerada no boleto não é a data de vencimento da sua fatura. O pagamento via boleto pode
+                  demorar <strong>até 3 dias úteis</strong> para ser identificado. Pagamentos não identificados
+                  em até 5 dias após o vencimento da fatura podem resultar em <strong>suspensão dos serviços</strong>
+                  e cobrança de encargos.
                 </small>
               </div>
               <ng-container *ngIf="!paymentLoading">
